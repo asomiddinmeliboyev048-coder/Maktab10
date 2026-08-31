@@ -14,12 +14,23 @@ class Oquvchi extends Model
         'fio',
         'phone',
         'address',
+        'kitoblar',
     ];
 
-
     /**
-     * O'quvchi qaysi sinfga tegishli
+     * "kitoblar" ustuni JSON sifatida saqlanadi va
+     * avtomatik array ko'rinishida qaytariladi.
+     *
+     * Struktura:
+     * [
+     *     'berilgan'   => ['Matematika', 'Fizika', ...],
+     *     'berilmagan' => ['Biologiya', ...],
+     * ]
      */
+    protected $casts = [
+        'kitoblar' => 'array',
+    ];
+
     public function sinf()
     {
         return $this->belongsTo(
@@ -28,14 +39,15 @@ class Oquvchi extends Model
         );
     }
 
-
     /**
-     * O'quvchining kitoblari
+     * O'quvchiga tegishli barcha baholar.
+     * Baho jadvalida bu o'quvchini bog'lovchi ustun
+     * "oquvchi_id" deb taxmin qilindi.
      */
-    public function bookIssues()
+    public function baholar()
     {
         return $this->hasMany(
-            BookIssue::class,
+            Baho::class,
             'oquvchi_id'
         );
     }

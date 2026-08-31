@@ -8,20 +8,16 @@ use Illuminate\Support\Facades\Route;
 class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * This namespace is applied to your controller routes.
-     *
-     * In addition, it is set as the URL generator's root namespace.
-     *
-     * @var string
-     */
-  // protected $namespace = 'App\Http\Controllers'; // Ushbu qator izohda bo'lishi kerak
-
-    /**
      * The path to the "home" route for your application.
      *
+     * Loyihangizda "/home" emas, "/dashboard" ishlatilgani uchun
+     * shu yerga ham "/dashboard" yozildi. Aks holda Laravel ba'zi
+     * standart holatlarda (masalan parolni tiklashdan keyin)
+     * mavjud bo'lmagan "/home" ga yo'naltirib, 404 chiqarishi mumkin.
+     *
      * @var string
      */
-    public const HOME = '/home';
+    public const HOME = '/dashboard';
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -30,8 +26,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-
         parent::boot();
     }
 
@@ -45,21 +39,22 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
-
-        //
     }
 
     /**
      * Define the "web" routes for the application.
      *
      * These routes all receive session state, CSRF protection, etc.
+     * Namespace berilmadi — web.php faylidagi barcha route'lar
+     * [Controller::class, 'method'] ko'rinishida yozilgani uchun
+     * namespace shart emas, va $this->namespace mavjud bo'lmagani
+     * sabab xatolik chiqarmasligi uchun olib tashlandi.
      *
      * @return void
      */
     protected function mapWebRoutes()
     {
         Route::middleware('web')
-             ->namespace($this->namespace)
              ->group(base_path('routes/web.php'));
     }
 
@@ -74,7 +69,6 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix('api')
              ->middleware('api')
-             ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
     }
 }

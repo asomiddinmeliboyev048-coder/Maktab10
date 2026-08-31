@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Oquvchi;
 use App\Sinf;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class OquvchiController extends Controller
 {
@@ -16,174 +15,427 @@ class OquvchiController extends Controller
     {
         $query = Oquvchi::with('sinf');
 
-        // Qidiruv
+        /*
+        |--------------------------------------------------------------------------
+        | QIDIRUV
+        |--------------------------------------------------------------------------
+        */
+
         if ($request->filled('search')) {
 
-            $search = $request->search;
+            $search = trim($request->search);
 
             $query->where(function ($q) use ($search) {
 
                 $q->where('fio', 'like', '%' . $search . '%')
-                  ->orWhere('student_id', 'like', '%' . $search . '%')
-                  ->orWhere('phone', 'like', '%' . $search . '%');
+                    ->orWhere('student_id', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%');
 
             });
         }
 
-        // Sinf bo'yicha filter
+        /*
+        |--------------------------------------------------------------------------
+        | SINF BO'YICHA FILTER
+        |--------------------------------------------------------------------------
+        */
+
         if ($request->filled('sinf_id')) {
 
-            $query->where('sinf_id', $request->sinf_id);
-
+            $query->where(
+                'sinf_id',
+                $request->sinf_id
+            );
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | O'QUVCHILAR
+        |--------------------------------------------------------------------------
+        */
+
         $oquvchilar = $query
-            ->orderBy('fio')
+            ->orderBy('fio', 'asc')
             ->paginate(15)
-            ->appends($request->all());
+            ->appends($request->except('page'));
 
-        $sinflar = Sinf::orderBy('name')->get();
+        /*
+        |--------------------------------------------------------------------------
+        | SINFLAR
+        |--------------------------------------------------------------------------
+        */
 
-        return view('oquvchilar.index', compact(
-            'oquvchilar',
-            'sinflar'
-        ));
+        $sinflar = Sinf::orderBy(
+            'name',
+            'asc'
+        )->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | VIEW
+        |--------------------------------------------------------------------------
+        */
+
+        return view(
+            'oquvchilar.index',
+            compact(
+                'oquvchilar',
+                'sinflar'
+            )
+        );
     }
 
 
     /**
-     * O'quvchi qo'shish formasi
+     * O'quvchi qo'shish sahifasi
      */
     public function create()
     {
-        $sinflar = Sinf::orderBy('name')->get();
+        $sinflar = Sinf::orderBy(
+            'name',
+            'asc'
+        )->get();
 
-        return view('oquvchilar.create', compact('sinflar'));
+        return view(
+            'oquvchilar.create',
+            compact('sinflar')
+        );
     }
 
 
     /**
-     * O'quvchini saqlash
+     * Yangi o'quvchini saqlash
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'fio' => 'required|string|max:255',
-            'sinf_id' => 'required|exists:sinflar,id',
-            'phone' => 'nullable|string|max:50',
-            'address' => 'nullable|string',
-        ], [
-            'fio.required' => 'O‘quvchining F.I.O sini kiriting.',
-            'sinf_id.required' => 'Sinfni tanlang.',
-            'sinf_id.exists' => 'Tanlangan sinf mavjud emas.',
-        ]);
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDATION
+        |--------------------------------------------------------------------------
+        */
 
+        $request->validate(
+            [
+                'fio' => 'required|string|max:255',
 
-        // Unikal student ID
-        do {
+                'sinf_id' => 'required|exists:sinflar,id',
 
-            $studentId = 'ST-' . random_int(10000, 99999);
+                'phone' => 'nullable|string|max:50',
 
-        } while (
-            Oquvchi::where('student_id', $studentId)->exists()
+                'address' => 'nullable|string|max:1000',
+            ],
+            [
+                'fio.required' =>
+                    'O‘quvchining F.I.O sini kiriting.',
+
+                'fio.string' =>
+                    'F.I.O faqat matn bo‘lishi kerak.',
+
+                'fio.max' =>
+                    'F.I.O juda uzun.',
+
+                'sinf_id.required' =>
+                    'Sinfni tanlang.',
+
+                'sinf_id.exists' =>
+                    'Tanlangan sinf mavjud emas.',
+
+                'phone.max' =>
+                    'Telefon raqami juda uzun.',
+
+                'address.max' =>
+                    'Manzil juda uzun.',
+            ]
         );
 
 
-        Oquvchi::create([
-            'student_id' => $studentId,
-            'sinf_id' => $request->sinf_id,
-            'fio' => $request->fio,
-            'phone' => $request->phone,
-            'address' => $request->address,
-        ]);
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | MA'LUMOTLARNI TOZALASH
+            |--------------------------------------------------------------------------
+            */
+
+            $fio = trim($request->fio);
+
+            $phone = $request->filled('phone')
+                ? trim($request->phone)
+                : null;
+
+            $address = $request->filled('address')
+                ? trim($request->address)
+                : null;
 
 
-        return redirect()
-            ->route('oquvchilar.index')
-            ->with(
-                'success',
-                'O‘quvchi muvaffaqiyatli qo‘shildi.'
+            /*
+            |--------------------------------------------------------------------------
+            | STUDENT ID GENERATSIYA
+            |--------------------------------------------------------------------------
+            */
+
+            do {
+
+                $studentId =
+                    'ST-' . random_int(10000, 99999);
+
+            } while (
+                Oquvchi::where(
+                    'student_id',
+                    $studentId
+                )->exists()
             );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | O'QUVCHINI YARATISH
+            |--------------------------------------------------------------------------
+            */
+
+            Oquvchi::create([
+                'student_id' => $studentId,
+
+                'sinf_id' => $request->sinf_id,
+
+                'fio' => $fio,
+
+                'phone' => $phone,
+
+                'address' => $address,
+            ]);
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | MUVAFFAQIYAT
+            |--------------------------------------------------------------------------
+            */
+
+            return redirect()
+                ->route('oquvchilar.index')
+                ->with(
+                    'success',
+                    'O‘quvchi muvaffaqiyatli qo‘shildi.'
+                );
+
+        } catch (\Exception $e) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | XATOLIK
+            |--------------------------------------------------------------------------
+            */
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with(
+                    'error',
+                    'O‘quvchini qo‘shishda xatolik yuz berdi: '
+                    . $e->getMessage()
+                );
+        }
     }
 
 
     /**
-     * O'quvchini ko'rish
+     * O'quvchi ma'lumotlarini ko'rish
      */
     public function show($id)
     {
-        $oquvchi = Oquvchi::with('sinf')->findOrFail($id);
+        $oquvchi = Oquvchi::with('sinf')
+            ->findOrFail($id);
 
-        return view('oquvchilar.show', compact('oquvchi'));
+        return view(
+            'oquvchilar.show',
+            compact('oquvchi')
+        );
     }
 
 
     /**
-     * Tahrirlash formasi
+     * O'quvchini tahrirlash sahifasi
      */
     public function edit($id)
     {
+        /*
+        |--------------------------------------------------------------------------
+        | O'QUVCHI
+        |--------------------------------------------------------------------------
+        */
+
         $oquvchi = Oquvchi::findOrFail($id);
 
-        $sinflar = Sinf::orderBy('name')->get();
 
-        return view('oquvchilar.edit', compact(
-            'oquvchi',
-            'sinflar'
-        ));
+        /*
+        |--------------------------------------------------------------------------
+        | SINFLAR
+        |--------------------------------------------------------------------------
+        */
+
+        $sinflar = Sinf::orderBy(
+            'name',
+            'asc'
+        )->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | VIEW
+        |--------------------------------------------------------------------------
+        */
+
+        return view(
+            'oquvchilar.edit',
+            compact(
+                'oquvchi',
+                'sinflar'
+            )
+        );
     }
 
 
     /**
-     * Yangilash
+     * O'quvchini yangilash
      */
-    public function update(Request $request, $id)
-    {
+    public function update(
+        Request $request,
+        $id
+    ) {
+        /*
+        |--------------------------------------------------------------------------
+        | O'QUVCHINI TOPISH
+        |--------------------------------------------------------------------------
+        */
+
         $oquvchi = Oquvchi::findOrFail($id);
 
-        $request->validate([
-            'fio' => 'required|string|max:255',
-            'sinf_id' => 'required|exists:sinflar,id',
-            'phone' => 'nullable|string|max:50',
-            'address' => 'nullable|string',
-        ], [
-            'fio.required' => 'O‘quvchining F.I.O sini kiriting.',
-            'sinf_id.required' => 'Sinfni tanlang.',
-            'sinf_id.exists' => 'Tanlangan sinf mavjud emas.',
-        ]);
 
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDATION
+        |--------------------------------------------------------------------------
+        */
+
+        $request->validate(
+            [
+                'fio' => 'required|string|max:255',
+
+                'sinf_id' => 'required|exists:sinflar,id',
+
+                'phone' => 'nullable|string|max:50',
+
+                'address' => 'nullable|string|max:1000',
+            ],
+            [
+                'fio.required' =>
+                    'O‘quvchining F.I.O sini kiriting.',
+
+                'fio.string' =>
+                    'F.I.O faqat matn bo‘lishi kerak.',
+
+                'fio.max' =>
+                    'F.I.O juda uzun.',
+
+                'sinf_id.required' =>
+                    'Sinfni tanlang.',
+
+                'sinf_id.exists' =>
+                    'Tanlangan sinf mavjud emas.',
+
+                'phone.max' =>
+                    'Telefon raqami juda uzun.',
+
+                'address.max' =>
+                    'Manzil juda uzun.',
+            ]
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | MA'LUMOTLARNI TOZALASH
+        |--------------------------------------------------------------------------
+        */
+
+        $fio = trim($request->fio);
+
+        $phone = $request->filled('phone')
+            ? trim($request->phone)
+            : null;
+
+        $address = $request->filled('address')
+            ? trim($request->address)
+            : null;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | YANGILASH
+        |--------------------------------------------------------------------------
+        */
 
         $oquvchi->update([
+            'fio' => $fio,
+
             'sinf_id' => $request->sinf_id,
-            'fio' => $request->fio,
-            'phone' => $request->phone,
-            'address' => $request->address,
+
+            'phone' => $phone,
+
+            'address' => $address,
         ]);
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | MUVAFFAQIYAT
+        |--------------------------------------------------------------------------
+        */
 
         return redirect()
             ->route('oquvchilar.index')
             ->with(
                 'success',
-                'O‘quvchi ma’lumotlari yangilandi.'
+                'O‘quvchi ma’lumotlari muvaffaqiyatli yangilandi.'
             );
     }
 
 
     /**
-     * O'chirish
+     * O'quvchini o'chirish
      */
     public function destroy($id)
     {
+        /*
+        |--------------------------------------------------------------------------
+        | O'QUVCHINI TOPISH
+        |--------------------------------------------------------------------------
+        */
+
         $oquvchi = Oquvchi::findOrFail($id);
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | O'CHIRISH
+        |--------------------------------------------------------------------------
+        */
+
         $oquvchi->delete();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RO'YXATGA QAYTISH
+        |--------------------------------------------------------------------------
+        */
 
         return redirect()
             ->route('oquvchilar.index')
             ->with(
                 'success',
-                'O‘quvchi o‘chirildi.'
+                'O‘quvchi muvaffaqiyatli o‘chirildi.'
             );
     }
 }

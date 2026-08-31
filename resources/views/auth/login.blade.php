@@ -11,19 +11,19 @@
 
     <!-- Bootstrap CSS -->
     <link
-        href="{{ asset('admin/assets/vendor/bootstrap/css/bootstrap.min.css') }}"
+        href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}"
         rel="stylesheet"
     >
 
     <!-- Bootstrap Icons -->
     <link
-        href="{{ asset('admin/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}"
+        href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}"
         rel="stylesheet"
     >
 
     <!-- NiceAdmin CSS -->
     <link
-        href="{{ asset('admin/assets/css/style.css') }}"
+        href="{{ asset('assets/css/style.css') }}"
         rel="stylesheet"
     >
 
@@ -57,7 +57,7 @@
                             >
 
                                 <img
-                                    src="{{ asset('admin/assets/img/logo.png') }}"
+                                    src="{{ asset('assets/img/logo.png') }}"
                                     alt="Smart School"
                                 >
 
@@ -272,7 +272,7 @@
 <!-- Bootstrap JS -->
 
 <script
-    src="{{ asset('admin/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"
+    src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"
 ></script>
 
 </body>

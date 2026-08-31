@@ -12,6 +12,14 @@ class User extends Authenticatable
 
     /**
      * Mass assignment uchun ruxsat berilgan ustunlar.
+     *
+     * Ushbu massivga yangi xodim ma'lumotlari ham qo'shildi:
+     *
+     * - staff_id  -> xodimning avtomatik ID raqami
+     * - login     -> tizimga kirish login'i
+     * - subject   -> o'qituvchining fani
+     * - phone     -> telefon raqami
+     * - address   -> manzil
      */
     protected $fillable = [
         'name',
@@ -20,10 +28,16 @@ class User extends Authenticatable
         'avatar',
         'role',
         'subject',
+        'staff_id',
+        'login',
+        'phone',
+        'address',
     ];
 
     /**
      * JSON chiqarishda yashiriladigan ustunlar.
+     *
+     * Password hech qachon foydalanuvchiga chiqarilmaydi.
      */
     protected $hidden = [
         'password',
@@ -39,6 +53,8 @@ class User extends Authenticatable
 
     /**
      * Sinf rahbari bo'lgan sinflar.
+     *
+     * users.id -> sinflar.teacher_id
      */
     public function sinflar()
     {
@@ -50,6 +66,8 @@ class User extends Authenticatable
 
     /**
      * Foydalanuvchi direktorligini tekshirish.
+     *
+     * role = director bo'lsa true qaytaradi.
      */
     public function isDirector()
     {
@@ -58,6 +76,8 @@ class User extends Authenticatable
 
     /**
      * Foydalanuvchi o'qituvchi ekanligini tekshirish.
+     *
+     * role = teacher bo'lsa true qaytaradi.
      */
     public function isTeacher()
     {
@@ -65,7 +85,65 @@ class User extends Authenticatable
     }
 
     /**
+     * Foydalanuvchi direktor o'rinbosari ekanligini tekshirish.
+     *
+     * Direktor o'rinbosari tizimda:
+     *
+     * role = deputy
+     *
+     * ko'rinishida saqlanadi.
+     *
+     * (Eslatma: bu metod avval 'deputy_director' ni tekshirar edi,
+     * lekin haqiqiy bazadagi qiymat 'deputy' — shu yerda tuzatildi.)
+     */
+    public function isDeputyDirector()
+    {
+        return $this->role === 'deputy';
+    }
+
+    /**
+     * Foydalanuvchi rahbariyat tarkibiga kirishini tekshirish.
+     *
+     * Director + Deputy Director
+     */
+    public function isManagement()
+    {
+        return in_array(
+            $this->role,
+            [
+                'director',
+                'deputy',
+            ],
+            true
+        );
+    }
+
+    /**
+     * Foydalanuvchi xodim ekanligini tekshirish.
+     *
+     * Hozirgi tizimdagi direktor,
+     * direktor o'rinbosari va o'qituvchilar.
+     */
+    public function isStaff()
+    {
+        return in_array(
+            $this->role,
+            [
+                'director',
+                'deputy',
+                'teacher',
+            ],
+            true
+        );
+    }
+
+    /**
      * Avatar URL.
+     *
+     * Agar foydalanuvchining o'z avatari bo'lsa,
+     * storage ichidagi rasm qaytariladi.
+     *
+     * Aks holda default profil rasmi ishlatiladi.
      */
     public function getAvatarUrlAttribute()
     {
@@ -74,5 +152,33 @@ class User extends Authenticatable
         }
 
         return asset('assets/img/profile-img.jpg');
+    }
+        /**
+     * Foydalanuvchiga individual biriktirilgan ruxsatlar.
+     * (Permission tizimi uchun qo'shildi.)
+     */
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'user_permissions')->withTimestamps();
+    }
+
+    /**
+     * Foydalanuvchida berilgan slug bo'yicha ruxsat bor-yo'qligini tekshiradi.
+     *
+     * Director va deputy — super admin: har doim true.
+     * Teacher uchun bazadagi individual ruxsat tekshiriladi.
+     *
+     * Performance: $this->permissions bitta request davomida faqat
+     * bir marta yuklanadi (Eloquent lazy-load keshlanadi), shuning
+     * uchun bir nechta hasPermission() chaqirig'i qo'shimcha query
+     * yubormaydi.
+     */
+    public function hasPermission(string $slug): bool
+    {
+        if ($this->isDirector() || $this->isDeputyDirector()) {
+            return true;
+        }
+
+        return $this->permissions->contains('slug', $slug);
     }
 }

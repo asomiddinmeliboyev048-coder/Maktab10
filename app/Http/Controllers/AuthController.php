@@ -48,6 +48,16 @@ class AuthController extends Controller
                     );
             }
 
+            if ($user->role === 'deputy') {
+
+                return redirect()
+                    ->route('dashboard')
+                    ->with(
+                        'success',
+                        'Direktor o‘rinbosari sifatida tizimga muvaffaqiyatli kirdingiz.'
+                    );
+            }
+
             if ($user->role === 'teacher') {
 
                 return redirect()
