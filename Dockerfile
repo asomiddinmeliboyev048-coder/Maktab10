@@ -17,6 +17,7 @@ COPY . .
 # Apache DocumentRoot'ni public/ papkaga yo'naltirish
 RUN sed -i 's#/var/www/html#/var/www/html/public#g' /etc/apache2/sites-available/*.conf /etc/apache2/apache2.conf
 
+# Paketlarni o'rnatish
 RUN composer install --no-dev --optimize-autoloader
 
 # Storage va cache papkalariga yozish huquqini berish
@@ -28,4 +29,5 @@ RUN sed -i "s/80/\${PORT}/g" /etc/apache2/ports.conf /etc/apache2/sites-availabl
 
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+# ENG ASOSIY QISM: Server ishga tushishdan oldin migratsiyani bajarish
+CMD sh -c "php artisan config:clear && php artisan migrate --force && apache2-foreground"
