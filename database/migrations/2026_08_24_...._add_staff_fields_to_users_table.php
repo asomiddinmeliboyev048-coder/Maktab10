@@ -19,46 +19,32 @@ class AddStaffFieldsToUsersTable extends Migration
             |--------------------------------------------------------------------------
             | Xodim ID raqami
             |--------------------------------------------------------------------------
-            |
-            | Direktor, direktor o‘rinbosari va o‘qituvchilarga
-            | avtomatik ID biriktirish uchun.
-            |
             */
             if (!Schema::hasColumn('users', 'staff_id')) {
                 $table->string('staff_id', 50)
                     ->nullable()
-                    ->unique()
-                    ->after('id');
+                    ->unique();
             }
 
             /*
             |--------------------------------------------------------------------------
             | Login
             |--------------------------------------------------------------------------
-            |
-            | O‘qituvchi va boshqa xodimlarning tizimga
-            | login orqali kirishi uchun.
-            |
             */
             if (!Schema::hasColumn('users', 'login')) {
                 $table->string('login', 100)
                     ->nullable()
-                    ->unique()
-                    ->after('email');
+                    ->unique();
             }
 
             /*
             |--------------------------------------------------------------------------
             | Asosiy fan
             |--------------------------------------------------------------------------
-            |
-            | O‘qituvchining asosiy fani.
-            |
             */
             if (!Schema::hasColumn('users', 'subject')) {
                 $table->string('subject', 255)
-                    ->nullable()
-                    ->after('login');
+                    ->nullable();
             }
 
             /*
@@ -68,8 +54,7 @@ class AddStaffFieldsToUsersTable extends Migration
             */
             if (!Schema::hasColumn('users', 'phone')) {
                 $table->string('phone', 50)
-                    ->nullable()
-                    ->after('subject');
+                    ->nullable();
             }
 
             /*
@@ -79,8 +64,7 @@ class AddStaffFieldsToUsersTable extends Migration
             */
             if (!Schema::hasColumn('users', 'address')) {
                 $table->text('address')
-                    ->nullable()
-                    ->after('phone');
+                    ->nullable();
             }
 
         });
@@ -95,12 +79,6 @@ class AddStaffFieldsToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
 
-            /*
-            |--------------------------------------------------------------------------
-            | Unique indexlarni avval olib tashlaymiz
-            |--------------------------------------------------------------------------
-            */
-
             if (Schema::hasColumn('users', 'staff_id')) {
                 $table->dropUnique('users_staff_id_unique');
             }
@@ -108,12 +86,6 @@ class AddStaffFieldsToUsersTable extends Migration
             if (Schema::hasColumn('users', 'login')) {
                 $table->dropUnique('users_login_unique');
             }
-
-            /*
-            |--------------------------------------------------------------------------
-            | Ustunlarni olib tashlash
-            |--------------------------------------------------------------------------
-            */
 
             if (Schema::hasColumn('users', 'address')) {
                 $table->dropColumn('address');
