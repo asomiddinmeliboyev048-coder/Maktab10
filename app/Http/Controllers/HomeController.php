@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class HomeController extends Controller
 {
@@ -29,6 +31,11 @@ class HomeController extends Controller
         );
     }
 
+    public function redirectToLogin()
+    {
+        return redirect()->route('login');
+    }
+
     public function index()
     {
         return view('home', $this->statsData());
@@ -37,5 +44,48 @@ class HomeController extends Controller
     public function dashboard()
     {
         return view('dashboard', $this->statsData());
+    }
+
+    public function xonalarIndex()
+    {
+        return view('placeholder', ['title' => 'Xonalar']);
+    }
+
+    public function hisobotlarIndex()
+    {
+        return view('placeholder', ['title' => 'Hisobotlar']);
+    }
+
+    public function teacherTest()
+    {
+        return 'O‘qituvchi paneli ishlayapti!';
+    }
+
+    public function diagnostikaLogin()
+    {
+        if (!Schema::hasTable('users')) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'users jadvali mavjud emas.'
+            ]);
+        }
+
+        $user = DB::table('users')
+            ->select('id', 'name', 'email', 'role')
+            ->where('email', 'director@school.uz')
+            ->first();
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'director@school.uz Render database ichida topilmadi.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Direktor Render database ichida mavjud.',
+            'user' => $user
+        ]);
     }
 }

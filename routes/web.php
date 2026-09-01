@@ -36,9 +36,7 @@ Route::get('/welcome', [WelcomeController::class, 'index'])->name('welcome');
 | ROOT
 |--------------------------------------------------------------------------
 */
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+Route::get('/', [HomeController::class, 'redirectToLogin'])->name('root');
 
 /*
 |--------------------------------------------------------------------------
@@ -174,12 +172,13 @@ Route::middleware('auth')->group(function () {
             [DarsJadvaliController::class, 'index']
         )->name('darsjadvali.index');
 
-        // Alias: home.blade.php "dars_jadvali.index" (pastki chiziq bilan) nomini
-        // chaqiradi — shu nom bilan ham bir xil sahifaga yo'naltiramiz.
+        // Alias: /darsjadvali oldingi sahifa uchun, lekin route cache uchun
+        // nom berilmagan holda qoldiramiz, chunki bir xil URI uchun ikki
+        // xil nom bo'lmasligi kerak.
         Route::get(
             '/darsjadvali',
             [DarsJadvaliController::class, 'index']
-        )->name('darsjadvali.index');
+        );
 
         Route::get(
             '/darsjadvali/import',
@@ -226,18 +225,14 @@ Route::middleware('auth')->group(function () {
         | BOSHQA BO'LIMLAR
         |--------------------------------------------------------------------------
         */
-        Route::get('/xonalar', function () {
-            return view('placeholder', ['title' => 'Xonalar']);
-        })->name('xonalar.index');
+        Route::get('/xonalar', [HomeController::class, 'xonalarIndex'])->name('xonalar.index');
 
         // KUTUBXONA
         Route::get('/kutubxona', [KutubxonaController::class, 'index'])->name('kutubxona.index');
         Route::get('/kutubxona/berilgan', [KutubxonaController::class, 'berilgan'])->name('kutubxona.berilgan');
         Route::get('/kutubxona/berilmagan', [KutubxonaController::class, 'berilmagan'])->name('kutubxona.berilmagan');
 
-        Route::get('/hisobotlar', function () {
-            return view('placeholder', ['title' => 'Hisobotlar']);
-        })->name('hisobotlar.index');
+        Route::get('/hisobotlar', [HomeController::class, 'hisobotlarIndex'])->name('hisobotlar.index');
 
         Route::get('/statistika', [StatistikaController::class, 'index'])->name('statistika.index');
 
@@ -308,9 +303,7 @@ Route::middleware('auth')->group(function () {
             [DarsJadvaliController::class, 'teacherSchedule']
         )->name('darsjadvali.teacher');
 
-        Route::get('/teacher/test', function () {
-            return 'O‘qituvchi paneli ishlayapti!';
-        })->name('teacher.test');
+        Route::get('/teacher/test', [HomeController::class, 'teacherTest'])->name('teacher.test');
 
         /*
         |--------------------------------------------------------------------------
@@ -352,38 +345,7 @@ Route::middleware('auth')->group(function () {
             [DavomatController::class, 'store']
         )->name('davomat.store');
 
-Route::get('/diagnostika-login', function () {
-
-    if (!Schema::hasTable('users')) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'users jadvali mavjud emas.'
-        ]);
-    }
-
-    $user = DB::table('users')
-        ->select(
-            'id',
-            'name',
-            'email',
-            'role'
-        )
-        ->where('email', 'director@school.uz')
-        ->first();
-
-    if (!$user) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'director@school.uz Render database ichida topilmadi.'
-        ]);
-    }
-
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Direktor Render database ichida mavjud.',
-        'user' => $user
-    ]);
-});
+Route::get('/diagnostika-login', [HomeController::class, 'diagnostikaLogin']);
     });
 
 });
