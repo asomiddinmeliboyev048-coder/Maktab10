@@ -28,7 +28,7 @@ class HomeController extends Controller
         $songgi_oquvchilar = Schema::hasTable('oquvchilar')
             ? DB::table('oquvchilar')
                 ->leftJoin('sinflar', 'oquvchilar.sinf_id', '=', 'sinflar.id')
-                ->select('oquvchilar.*', 'sinflar.nomi as sinf_nomi')
+                ->select('oquvchilar.*', 'sinflar.name as sinf_nomi')
                 ->orderBy('oquvchilar.id', 'desc')
                 ->limit(5)
                 ->get()
