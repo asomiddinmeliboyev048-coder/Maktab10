@@ -17,4 +17,4 @@ use App\Http\Controllers\TelegramController;
 
 Route::post('/telegram/webhook', [TelegramController::class, 'handleWebhook']);
 
-Route::middleware('auth:api')->get('/user', 'Auth\UserController@current');
+Route::middleware('auth:api')->get('/user', [\App\Http\Controllers\Auth\UserController::class, 'current']);
