@@ -422,16 +422,20 @@
 
                                 <td>
 
-                                    @if($oquvchi->telefon)
+                                    @php
+                                        $telefon = $oquvchi->telefon ?? $oquvchi->phone ?? null;
+                                    @endphp
+
+                                    @if(!empty($telefon))
 
                                         <span>
-                                            {{ $oquvchi->telefon }}
+                                            {{ $telefon }}
                                         </span>
 
                                     @else
 
                                         <span class="text-muted">
-                                            -
+                                            —
                                         </span>
 
                                     @endif
