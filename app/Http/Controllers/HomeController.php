@@ -10,17 +10,29 @@ class HomeController extends Controller
 {
     protected function statsData()
     {
-        $sinflar_soni = DB::table('sinflar')->count();
-        $oquvchilar_soni = DB::table('oquvchilar')->count();
-        $oqituvchilar_soni = DB::table('oqituvchilar')->count();
-        $xonalar_soni = DB::table('xonalar')->count();
+        $sinflar_soni = Schema::hasTable('sinflar') ? DB::table('sinflar')->count() : 0;
+        $oquvchilar_soni = Schema::hasTable('oquvchilar') ? DB::table('oquvchilar')->count() : 0;
 
-        $songgi_oquvchilar = DB::table('oquvchilar')
-            ->leftJoin('sinflar', 'oquvchilar.sinf_id', '=', 'sinflar.id')
-            ->select('oquvchilar.*', 'sinflar.nomi as sinf_nomi')
-            ->orderBy('oquvchilar.id', 'desc')
-            ->limit(5)
-            ->get();
+        if (Schema::hasTable('oqituvchilar')) {
+            $oqituvchilar_soni = DB::table('oqituvchilar')->count();
+        } elseif (Schema::hasTable('users')) {
+            $oqituvchilar_soni = DB::table('users')->where('role', 'teacher')->count();
+        } else {
+            $oqituvchilar_soni = 0;
+        }
+
+        $xonalar_soni = Schema::hasTable('xonalar')
+            ? DB::table('xonalar')->count()
+            : $sinflar_soni;
+
+        $songgi_oquvchilar = Schema::hasTable('oquvchilar')
+            ? DB::table('oquvchilar')
+                ->leftJoin('sinflar', 'oquvchilar.sinf_id', '=', 'sinflar.id')
+                ->select('oquvchilar.*', 'sinflar.nomi as sinf_nomi')
+                ->orderBy('oquvchilar.id', 'desc')
+                ->limit(5)
+                ->get()
+            : collect();
 
         return compact(
             'sinflar_soni',
