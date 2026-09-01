@@ -65,9 +65,6 @@
 
         </div>
 
-<<<<<<< HEAD
-=======
-
         <!-- O'quvchilar -->
         <div class="col-xl-3 col-md-6">
 
@@ -491,7 +488,6 @@
     </div>
 
 </div>
->>>>>>> 09dbd0f (fix: safely render student phone field in dashboard view)
 
         <!-- O'quvchilar -->
         <div class="col-xl-3 col-md-6">
