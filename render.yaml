@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: maktab10-app
+    env: docker
+    region: ohio
+    plan: free
+
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        sync: false
+
+    dockerfilePath: ./Dockerfile
+
+    healthCheckPath: /welcome
+
+    # Migrations va seeding avtomatik run qilinadi docker-entrypoint.sh da
+
+databases:
+  - name: maktab10-db
+    databaseName: maktab10
+    user: maktab10_user
+    region: ohio
+    plan: free
