@@ -350,6 +350,42 @@ Route::middleware('auth')->group(function () {
             '/davomat/{sinf}/belgilash',
             [DavomatController::class, 'store']
         )->name('davomat.store');
+
+        use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
+Route::get('/diagnostika-login', function () {
+
+    if (!Schema::hasTable('users')) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'users jadvali mavjud emas.'
+        ]);
+    }
+
+    $user = DB::table('users')
+        ->select(
+            'id',
+            'name',
+            'email',
+            'role'
+        )
+        ->where('email', 'director@school.uz')
+        ->first();
+
+    if (!$user) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'director@school.uz Render database ichida topilmadi.'
+        ]);
+    }
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Direktor Render database ichida mavjud.',
+        'user' => $user
+    ]);
+});
     });
 
 });
