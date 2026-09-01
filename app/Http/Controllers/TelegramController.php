@@ -17,7 +17,7 @@ class TelegramController extends Controller
     | MUHIM: Bu yerga saytingiz login sahifasining haqiqiy manzilini qo'ying.
     |--------------------------------------------------------------------------
     */
-    const SITE_LOGIN_URL = 'https://smartschool.uz/login';
+    const SITE_LOGIN_URL = 'https://maktab10.onrender.com/login';
 
     const BTN_TEACHER = '📗 O‘qituvchi';
     const BTN_STUDENT = '🎓 O‘quvchi';
@@ -164,7 +164,7 @@ class TelegramController extends Controller
 
     protected function handleTeacherButton($chatId)
     {
-        $inline = $this->tg->inlineUrlButton('🔐 Tizimga kirish', self::SITE_LOGIN_URL);
+        $inline = $this->tg->inlineUrlButton('🔐 Kirish', self::SITE_LOGIN_URL);
 
         $this->tg->sendMessage(
             $chatId,
