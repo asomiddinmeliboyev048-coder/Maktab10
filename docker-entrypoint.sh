@@ -5,6 +5,10 @@ if [ -n "$PORT" ]; then
     sed -i "s/80/${PORT}/g" /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf || true
 fi
 
+mkdir -p storage/framework/sessions
+chmod -R 775 storage bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache || true
+
 php artisan config:clear
 php artisan cache:clear
 php artisan route:clear || true
