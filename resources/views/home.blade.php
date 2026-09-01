@@ -15,7 +15,7 @@
             </h4>
 
             <p class="text-muted mb-0">
-                Smart Maktab tizimining umumiy holati
+                10Maktab tizimining umumiy holati
             </p>
         </div>
 

@@ -4,10 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Smart Maktab — Zamonaviy Maktab Boshqaruv ERP & SaaS Tizimi</title>
+    <title>10Maktab — Zamonaviy Maktab Boshqaruv ERP & SaaS Tizimi</title>
 
     <meta name="description"
-          content="Smart Maktab — o‘quvchilar, o‘qituvchilar, dars jadvali, real-vaqt davomat, elektron jurnal, kutubxona va tahliliy hisobotlarni yagona bulutli platformada boshqarish tizimi.">
+          content="10Maktab — o‘quvchilar, o‘qituvchilar, dars jadvali, real-vaqt davomat, elektron jurnal, kutubxona va tahliliy hisobotlarni yagona bulutli platformada boshqarish tizimi.">
 
     <!-- Google Fonts: Plus Jakarta Sans & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -84,7 +84,7 @@
                 </div>
                 <div>
                     <span class="text-xl font-extrabold tracking-tight text-slate-900 flex items-center gap-1.5">
-                        Smart Maktab
+                        10Maktab
                         <span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-brand-50 text-brand-600 border border-brand-200">ERP</span>
                     </span>
                     <span class="text-[11px] font-medium text-slate-400 block -mt-0.5 tracking-wider uppercase">School Management</span>
@@ -679,7 +679,7 @@
                 Ko‘p beriladigan savollar
             </h2>
             <p class="text-slate-600 mt-3 text-base">
-                Smart Maktab tizimi bo‘yicha eng muhim savollarga javoblar.
+                10Maktab tizimi bo‘yicha eng muhim savollarga javoblar.
             </p>
         </div>
 
@@ -734,7 +734,7 @@
                 </button>
                 <div x-show="activeFaq === 3" x-cloak x-collapse>
                     <div class="px-6 pb-6 text-sm sm:text-base text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
-                        Ha, Smart Maktab veb-interfeysi barcha smartfonlar, planshetlar va brauzerlar uchun 100% moslashgan (Fully Responsive). Har qanday qurilmadan qulay foydalanish mumkin.
+                        Ha, 10Maktab veb-interfeysi barcha smartfonlar, planshetlar va brauzerlar uchun 100% moslashgan (Fully Responsive). Har qanday qurilmadan qulay foydalanish mumkin.
                     </div>
                 </div>
             </div>
@@ -777,7 +777,7 @@
             Maktabingiz boshqaruvini bugunoq yangi bosqichga olib chiqing
         </h2>
         <p class="text-base sm:text-lg text-brand-100 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Smart Maktab bilan qog‘ozbozlikni kamaytiring, shaffoflikni ta'minlang va ta'lim sifatini oshiring.
+            10Maktab bilan qog‘ozbozlikni kamaytiring, shaffoflikni ta'minlang va ta'lim sifatini oshiring.
         </p>
 
         @if (Route::has('login'))
@@ -819,7 +819,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
                         </svg>
                     </div>
-                    <span class="text-xl font-bold text-white tracking-tight">Smart Maktab</span>
+                    <span class="text-xl font-bold text-white tracking-tight">10Maktab</span>
                 </div>
                 <p class="text-sm text-slate-400 leading-relaxed max-w-sm">
                     Umumta'lim maktablari va o‘quv markazlari faoliyatini to‘liq avtomatlashtirish, tahlil qilish va samaradorligini oshirish uchun mo‘ljallangan zamonaviy ERP platformasi.
@@ -855,7 +855,7 @@
         <!-- Bottom Bar -->
         <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
             <div>
-                © {{ date('Y') }} Smart Maktab ERP. Barcha huquqlar himoyalangan.
+                © {{ date('Y') }} 10Maktab ERP. Barcha huquqlar himoyalangan.
             </div>
             <div class="flex items-center gap-6">
                 <span>Maxfiylik siyosati</span>

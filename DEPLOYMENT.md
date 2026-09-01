@@ -1,4 +1,4 @@
-# Render Deploy Guide - Smart Maktab
+# Render Deploy Guide - 10Maktab
 
 ## 🚀 Deployment Instructions
 
@@ -44,7 +44,7 @@ Plan: Free (yoki Pro)
 Render'da quyidagi environment variables'ni o'rnatish:
 
 ```env
-APP_NAME=Smart Maktab
+APP_NAME=10Maktab
 APP_ENV=production
 APP_DEBUG=false
 APP_KEY=base64:GENERATED_KEY_HERE  # php artisan key:generate orqali generate qiling

@@ -7,7 +7,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Smart School | Tizimga kirish</title>
+    <title>10Maktab | Tizimga kirish</title>
 
     <!-- Bootstrap CSS -->
     <link
@@ -58,11 +58,11 @@
 
                                 <img
                                     src="{{ asset('assets/img/logo.png') }}"
-                                    alt="Smart School"
+                                    alt="10Maktab"
                                 >
 
                                 <span class="d-none d-lg-block">
-                                    Smart School
+                                    10Maktab
                                 </span>
 
                             </a>
@@ -252,7 +252,7 @@
 
                         <div class="credits text-center">
 
-                            Smart School Management System
+                            10Maktab Management System
 
                         </div>
 

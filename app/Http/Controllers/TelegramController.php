@@ -75,7 +75,7 @@ class TelegramController extends Controller
             /* ---- /help ---- */
             if ($text === '/help') {
                 $this->tg->sendMessage($chatId,
-                    "<b>Smart School Bot</b>\n\n" .
+                    "<b>10Maktab Bot</b>\n\n" .
                     "• /start — Botni qayta ishga tushirish\n" .
                     "• Pastdagi tugmalar orqali kerakli bo'limni tanlang."
                 );
@@ -152,7 +152,7 @@ class TelegramController extends Controller
 
         $this->tg->sendMessage(
             $chatId,
-            "Assalomu alaykum! 🎓\n\nSmart School rasmiy botiga xush kelibsiz.\nQuyidagi bo'limlardan birini tanlang:",
+            "Assalomu alaykum! 🎓\n\n10Maktab rasmiy botiga xush kelibsiz.\nQuyidagi bo'limlardan birini tanlang:",
             $keyboard
         );
     }

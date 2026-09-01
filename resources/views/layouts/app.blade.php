@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Smart School') - Maktab Boshqaruv Tizimi</title>
-    <meta name="description" content="Smart School - Zamonaviy va aqlli maktab boshqaruv platformasi">
+    <title>@yield('title', '10Maktab') - Maktab Boshqaruv Tizimi</title>
+    <meta name="description" content="10Maktab - Zamonaviy va aqlli maktab boshqaruv platformasi">
 
     {{-- Zamonaviy Premium Font: Plus Jakarta Sans --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -444,6 +444,7 @@
 {{-- MOBILE BACKDROP OVERLAY --}}
 <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
+<<<<<<< HEAD
 {{-- MODERN HEADER --}}
 <header id="header" class="modern-header fixed-top d-flex align-items-center px-3 px-lg-4">
     <div class="d-flex align-items-center justify-content-between gap-3">
@@ -451,7 +452,15 @@
             <div class="brand-logo-box">
                 <i class="bi bi-mortarboard-fill" style="font-size: 22px;"></i>
             </div>
-            <span class="brand-text d-none d-sm-block">Smart School</span>
+            <span class="brand-text d-none d-sm-block">10Maktab</span>
+=======
+{{-- HEADER --}}
+<header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="d-flex align-items-center justify-content-between">
+        <a href="{{ route('dashboard') }}" class="logo d-flex align-items-center">
+            <i class="bi bi-mortarboard-fill me-2"></i>
+            <span class="d-none d-lg-block">10Maktab</span>
+>>>>>>> 280101e (feat: rename app branding to 10Maktab)
         </a>
         <div class="toggle-btn-modern" id="toggle-sidebar-btn" title="Menyuni ochish/yopish">
             <i class="bi bi-text-indent-left fs-5"></i>
@@ -772,7 +781,7 @@
     {{-- FOOTER --}}
     <footer class="modern-footer d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
         <div class="fw-medium">
-            &copy; {{ date('Y') }} <span class="text-primary fw-bold">Smart School</span>. Barcha huquqlar himoyalangan.
+            &copy; {{ date('Y') }} <span class="text-primary fw-bold">10Maktab</span>. Barcha huquqlar himoyalangan.
         </div>
         <div class="text-muted fw-semibold" style="font-size: 0.8rem;">
             Maktab Boshqaruv Platformasi v2.0
@@ -780,9 +789,41 @@
     </footer>
 </div>
 
+<<<<<<< HEAD
 {{-- BACK TO TOP --}}
 <a href="#" class="back-to-top-modern" id="back-to-top">
     <i class="bi bi-arrow-up-short fs-4"></i>
+=======
+    @if(session('warning'))
+        <div class="alert alert-warning alert-dismissible fade show smart-alert">
+            <i class="bi bi-exclamation-circle me-2"></i> {{ session('warning') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if(session('info'))
+        <div class="alert alert-info alert-dismissible fade show smart-alert">
+            <i class="bi bi-info-circle me-2"></i> {{ session('info') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    <div class="page-content">
+        @yield('content')
+    </div>
+</main>
+
+{{-- FOOTER --}}
+<footer id="footer" class="footer">
+    <div class="copyright">
+        &copy; {{ date('Y') }} <strong><span>10Maktab</span></strong> — Barcha huquqlar himoyalangan.
+    </div>
+    <div class="credits">Maktab Boshqaruv Tizimi</div>
+</footer>
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+>>>>>>> 280101e (feat: rename app branding to 10Maktab)
 </a>
 
 {{-- SCRIPTS --}}
