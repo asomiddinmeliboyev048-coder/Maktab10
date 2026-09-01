@@ -16,6 +16,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsPermissionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\WelcomeController;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 /*
 |--------------------------------------------------------------------------
@@ -350,9 +352,6 @@ Route::middleware('auth')->group(function () {
             '/davomat/{sinf}/belgilash',
             [DavomatController::class, 'store']
         )->name('davomat.store');
-
-        use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 Route::get('/diagnostika-login', function () {
 
