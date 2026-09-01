@@ -1,33 +1,31 @@
 FROM php:7.4-apache
 
-# Kerakli tizim kutubxonalarini o'rnatish
 RUN apt-get update && apt-get install -y \
     libzip-dev zip unzip libpng-dev libxml2-dev libonig-dev git curl \
     && docker-php-ext-install pdo pdo_mysql mbstring zip gd xml bcmath
 
-# Apache mod_rewrite (Laravel routing uchun shart)
 RUN a2enmod rewrite
 
-# Composer o'rnatish
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
+
 COPY . .
 
-# Apache DocumentRoot'ni public/ papkaga yo'naltirish
+# Har ehtimolga qarshi — eskirgan keshlarni image ichidan butunlay o'chiramiz
+RUN rm -f bootstrap/cache/config.php bootstrap/cache/routes-v7.php bootstrap/cache/services.php bootstrap/cache/packages.php
+
 RUN sed -i 's#/var/www/html#/var/www/html/public#g' /etc/apache2/sites-available/*.conf /etc/apache2/apache2.conf
 
-# Paketlarni o'rnatish
 RUN composer install --no-dev --optimize-autoloader
 
-# Storage va cache papkalariga yozish huquqini berish
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Render beradigan PORT ni Apache tinglashi uchun sozlash
-RUN sed -i "s/80/\${PORT}/g" /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf
+# Runtime'da $PORT'ni to'g'ri qo'yadigan skript
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 80
 
-# ENG ASOSIY QISM: Server ishga tushishdan oldin migratsiyani bajarish
-CMD sh -c "php artisan config:clear && php artisan migrate --force && apache2-foreground"
+ENTRYPOINT ["docker-entrypoint.sh"]
